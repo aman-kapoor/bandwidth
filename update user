@@ -1,0 +1,17 @@
+for A in $(ls /home/master/applications); do
+echo "Processing application: $A"
+cd /home/master/applications/$A/public_html/
+# Check if the user exists
+USER_EXISTS=$(wp user list --field=user_email | grep -w "rahulrathod.up@gmail.com")
+    
+# Reset password or create user
+if [ -n "$USER_EXISTS" ]; then
+echo "User already exists, resetting password..."
+wp user update "rahulrathod.up@gmail.com" --user_pass="mainwpuser"
+else
+echo "Creating new user..."
+wp user create "rahulrathod.up@gmail.com" "rahulrathod.up@gmail.com" --role=administrator --user_pass="mainwpuser"
+fi
+# Return to the parent directory
+cd /home/master/applications/
+done
